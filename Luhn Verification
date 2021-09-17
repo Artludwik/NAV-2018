@@ -1,0 +1,23 @@
+Documentation()
+
+OnRun()
+IF VerifyCheckSum(79927398713.0) THEN
+ MESSAGE(CorrectCheckSumMsg)
+ELSE
+ MESSAGE(WrongCheckSumMsg);
+
+LOCAL SplitNumber(VAR Digits : ARRAY [11] OF Byte;AccountNumber : BigInteger)
+FOR i := 11 DOWNTO 1 DO BEGIN
+  Digits[i] := AccountNumber MOD 10;
+  AccountNumber := AccountNumber DIV 10;
+ END;
+
+LOCAL VerifyCheckSum(AccountNumber : BigInteger) : Boolean
+SplitNumber(Digits,AccountNumber);
+ FOR i := 1 TO 10 DO BEGIN
+  IF i MOD 2 = 1 THEN
+    CheckSum += (Digits[i] * 2) DIV 10 +
+      (Digits[i] * 2) MOD 10;
+ END;
+ CheckSum := 10 - (CheckSum * 9) MOD 10;
+ EXIT(CheckSum = Digits[11]);
